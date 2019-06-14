@@ -43,6 +43,11 @@ class AuditController extends Controller
     public $age;
 
     /**
+     * @var bool False to run silently (without prompting the user for input).
+     */
+    public $interactive = true;
+
+    /**
      * @inheritdoc
      */
     public function options($actionID)
@@ -77,7 +82,7 @@ class AuditController extends Controller
         $this->preCleanupSummary($this->entry, $this->entrySolo, $panels, $this->age);
 
         // confirm
-        if ($this->confirm('Cleanup the above data?')) {
+        if (!$this->interactive || $this->confirm('Cleanup the above data?')) {
             // cleanup panels
             foreach ($panels as $id) {
                 if (!$this->cleanupPanel($id, $this->age)) {
